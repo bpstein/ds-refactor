@@ -40,6 +40,15 @@
       }
     });
 
+     $stateProvider.state('detail', {
+      url: '/detail',
+      views: {
+        'tab-favorites': {
+          templateUrl: 'templates/detail.html'
+        }
+      }
+    });
+
     $urlRouterProvider.otherwise('/discover');
 
   });
