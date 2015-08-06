@@ -2,6 +2,22 @@
   
   var app = angular.module('datespot', ['ionic']);
 
+  app.controller('ListCtrl', function($scope) {
+    $scope.spots = [
+      {
+        name: "Sexy Venue",
+        description: "this is a sweet venue"
+      },
+
+      {
+        name: "Seductive Spot",
+        description: "ideal to impress"
+      }
+    ];
+  });
+
+
+  // Configurations for tab and view navigation of app
   app.config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider.state('discover', {
@@ -31,11 +47,12 @@
       }
     });
 
-    $stateProvider.state('favorites', {
-      url: '/favorites',
+    $stateProvider.state('shortlist', {
+      url: '/shortlist',
+      controller: 'ListCtrl',
       views: {
-        'tab-favorites': {
-          templateUrl: 'templates/favorites.html'
+        'tab-shortlist': {
+          templateUrl: 'templates/shortlist.html'
         }
       }
     });
@@ -43,7 +60,7 @@
      $stateProvider.state('detail', {
       url: '/detail',
       views: {
-        'tab-favorites': {
+        'tab-shortlist': {
           templateUrl: 'templates/detail.html'
         }
       }

@@ -1,0 +1,10 @@
+<ion-view view-title="Shortlist">
+	<ion-content ng-controller="ListCtrl">
+		<div class="list">
+			<a href="#/detail" class="item" ng-repeat="spot in spots" href="#/detail">
+					<h2>{{spot.name}}</h2>
+					<p>{{spot.description}}</p>
+			</a>
+		</div>
+	</ion-content>
+</ion-view>
