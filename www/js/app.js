@@ -2,6 +2,7 @@
   
   var app = angular.module('datespot', ['ionic']);
 
+  // Controller to manage venue lists
   app.controller('ListCtrl', function($scope) {
     $scope.spots = [
       {
@@ -15,6 +16,12 @@
       }
     ];
   });
+
+  app.controller('ScrollCtrl', ['$scope', function($scope) {
+    $scope.data = {
+      isLoading: false
+    };
+  }]);
 
 
   // Configurations for tab and view navigation of app
