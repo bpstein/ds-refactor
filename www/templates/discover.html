@@ -1,5 +1,44 @@
 <ion-view view-title="Discover">
-	<ion-content class="padding">
+	<ion-content class="padding" scroll="false" ng-controller="DiscoverCtrl">
+		<td-cards>
+
+		  <td-card ng-repeat="spot in spots" 
+      on-destroy="spotDestroyed($index)" 
+      on-swipe-left="spotSwipedLeft($index)"
+      on-swipe-right="spotSwipedRight($index)"
+      on-partial-swipe="spotPartialSwipe(amt)">			
+
+        <div class="list card current-spot"
+          ng-class="{skipped: currentSpot.rated == false,
+                      favorited: currentSpot.rated == true}"
+          ng-show="currentSpot && !currentSpot.hide">
+
+	          <div class="item item-image">
+	            <div class="no-text overlayBox"><div class="noBox boxed"></div></div>
+	            <img ng-src="{{ currentSpot.image_url }}">
+	            <div class="yes-text overlayBox"><div class="yesBox boxed" id="centerMe">Save</div></div>
+	          </div>
+
+	          <div class="item">
+	            <h2>{{ currentSpot.name }}</h2>
+	            <p>{{ currentSpot.address }}</p>
+	          </div>
+
+	          <div class="item tabs tabs-secondary tabs-icon-left">
+	            <a class="tab-item" ng-click="sendFeedback(false)">
+	              <i class="icon ion-close"></i>
+	              Skip
+	            </a>
+	            <a class="tab-item" ng-click="sendFeedback(true)">
+	              <i class="icon ion-heart"></i>
+	              Favourite
+	            </a>
+	          </div>
+
+        </div>
+    	</td-card>
+		</td-cards>
+
 		This is the Discover view.
 	</ion-content>
 </ion-view>

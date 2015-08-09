@@ -2,7 +2,18 @@
   
   var app = angular.module('datespot', ['ionic']);
 
-  // Controller to manage venue lists
+  // Controller to manage scrolling menu for occasions
+  app.controller('ScrollCtrl', ['$scope', function($scope) {
+    $scope.data = {
+      isLoading: false
+    };
+  }]);
+
+  // Controller to manage functionality for the Filter
+
+ 
+ 
+  //Controller to manage the datespot shortlist
   app.controller('ListCtrl', function($scope) {
     $scope.spots = [
       {
@@ -17,12 +28,64 @@
     ];
   });
 
-  app.controller('ScrollCtrl', ['$scope', function($scope) {
-    $scope.data = {
-      isLoading: false
-    };
-  }]);
+  app.controller('DetailCtrl', function($scope) {
+    $scope.spots
+  });
 
+  // Controller to manage discovery and swipe functionality
+  app.controller('DiscoverCtrl', function($scope, $timeout, User, Recommendations) {
+    $scope.spots = [
+      {
+        name: "Sexy Venue",
+        description: "this is a sweet venue",
+        address: "33 Sexy Street"
+      },
+
+      {
+        name: "Seductive Spot",
+        description: "ideal to impress",
+        address: "22 Seduction Street"
+      }
+    ];
+
+    // Get our recommended datespots
+      Recommendations.getVenues()
+      .then(function(){
+        
+        $scope.currentSpot = Recommendations.queue[0];
+        
+        console.log($scope.currentSpot);
+      });
+
+      // Fired when we favorite or skip a datespot
+      $scope.sendFeedback = function (bool) {
+        // first, add to favorites if they favorited
+        if (bool) User.addSpotToFavorites($scope.currentSpot);
+        $scope.currentSpot.rated = bool;
+        $scope.currentSpot.hide = true;
+
+      // Drop the current venue from the results list and load the next one.
+      Recommendations.nextVenue();
+
+        $timeout(function() {
+          // $timeout to allow animation to complete
+          $scope.currentSpot = Recommendations.queue[0];
+        
+          console.log('Loading Venue: ');
+          console.log( $scope.currentSpot );
+        
+        }, 250);
+      }
+
+      $scope.spotDestroyed = function(index) {
+        $scope.spots.splice(index, 1);
+      };
+
+      $scope.spotSwiped = function(index) {
+        var newSpot = // new spot data
+        $scope.spot.push(newSpot);
+      };
+    });
 
   // Configurations for tab and view navigation of app
   app.config(function($stateProvider, $urlRouterProvider) {

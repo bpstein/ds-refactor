@@ -4,24 +4,39 @@
     <script src="http://code.ionicframework.com/nightly/js/ionic.bundle.js"></script>
   </head>
   
-  <body ng-controller="MainCtrl">
-    <ion-header-bar class="bar-subheader">
-      <ion-scroll direction="x" class="wide-as-needed">
-        <a class="button inline">First Date</a>
-        <a class="button">Drinks date</a>
-        <a class="button">Dinner date</a>
-        <a class="button">Quirky date</a>
-        <a class="button">Impress a visitor</a>
-        <a class="button">Casual drinks with friends</a>
-        <a class="button">Brunch or coffee</a>
-        <a class="button">Go all out to impress</a>
-        <a class="button">Something corporate</a>      
-      </ion-scroll>
-    </ion-header-bar>
-   
-  <!--   <ion-content ng-class="{'has-loading': data.isLoading}">
-      <ion-toggle ng-model="data.isLoading">Toggle me to toggle loading!</ion-toggle>
-    </ion-content> -->
-    
-  </body>
+    <body ng-controller="FilterCtrl" class="padding">
+      <ion-view view-title="Search">
+      <ion-header-bar class="bar-subheader">
+        
+        <ion-scroll direction="x" class="wide-as-needed">
+          <a class="button inline">First Date</a>
+          <a class="button">Drinks date</a>
+          <a class="button">Dinner date</a>
+          <a class="button">Quirky date</a>
+          <a class="button">Impress a visitor</a>
+          <a class="button">Casual fun with friends</a>
+          <a class="button">Brunch or coffee</a>
+          <a class="button">Go all out to impress</a>
+          <a class="button">Something corporate</a>      
+        </ion-scroll>
+
+   <!--      <div class="item range range-positive">
+          How much?
+          <input type="range" name="volume">
+          <i class="icon ion-cash"></i>
+        </div>
+
+        <div class="padding item range range-positive">
+          How quirky?
+          <input type="range" name="volume">
+          <i class="icon ion-beaker"></i>
+        </div> -->
+
+      </ion-header-bar>
+     
+    <!--   <ion-content ng-class="{'has-loading': data.isLoading}">
+        <ion-toggle ng-model="data.isLoading">Toggle me to toggle loading!</ion-toggle>
+      </ion-content> -->
+      </ion-view>
+    </body>
 
