@@ -10,10 +10,16 @@
   }]);
 
   // Controller to manage functionality for the Filter
+  // app.controller('FilterCtrl', function($scope, User) {
+  //   $scope.runFilter = function (bool) {  
+  //     // To be expanded and perform the jSON query when
+  //     // the user has changed the search parameters
+  //     console.log('Runfilter clicked!'); 
+  //   }
+  // };  
+  
 
- 
- 
-  //Controller to manage the datespot shortlist
+  // Controller to manage the datespot shortlist
   app.controller('ListCtrl', function($scope) {
     $scope.spots = [
       {
@@ -28,12 +34,16 @@
     ];
   });
 
+  // Controller to manage detail page (details for each venue)
   app.controller('DetailCtrl', function($scope) {
     $scope.spots
   });
 
   // Controller to manage discovery and swipe functionality
   app.controller('DiscoverCtrl', function($scope, $timeout, User, Recommendations) {
+    
+    FactoryFuck.Scrot();
+
     $scope.spots = [
       {
         name: "Sexy Venue",
@@ -48,7 +58,7 @@
       }
     ];
 
-    // Get our recommended datespots
+      // Get our recommended datespots
       Recommendations.getVenues()
       .then(function(){
         
@@ -57,35 +67,47 @@
         console.log($scope.currentSpot);
       });
 
-      // Fired when we favorite or skip a datespot
-      $scope.sendFeedback = function (bool) {
-        // first, add to favorites if they favorited
-        if (bool) User.addSpotToFavorites($scope.currentSpot);
-        $scope.currentSpot.rated = bool;
-        $scope.currentSpot.hide = true;
+    // Fired when we favorite or skip a datespot
+    $scope.sendFeedback = function (bool) {
+      // first, add to favorites if they favorited
+      if (bool) User.addSpotToFavorites($scope.currentSpot);
+      $scope.currentSpot.rated = bool;
+      $scope.currentSpot.hide = true;
 
-      // Drop the current venue from the results list and load the next one.
-      Recommendations.nextVenue();
+    // Drop the current venue from the results list and load the next one.
+    Recommendations.nextVenue();
 
-        $timeout(function() {
-          // $timeout to allow animation to complete
-          $scope.currentSpot = Recommendations.queue[0];
-        
-          console.log('Loading Venue: ');
-          console.log( $scope.currentSpot );
-        
-        }, 250);
-      }
+      $timeout(function() {
+        // $timeout to allow animation to complete
+        $scope.currentSpot = Recommendations.queue[0];
+      
+        console.log('Loading Venue: ');
+        console.log( $scope.currentSpot );
+      
+      }, 250);
+    }
 
-      $scope.spotDestroyed = function(index) {
-        $scope.spots.splice(index, 1);
-      };
+    $scope.spotDestroyed = function(index) {
+      $scope.spots.splice(index, 1);
+    };
 
-      $scope.spotSwiped = function(index) {
-        var newSpot = // new spot data
-        $scope.spot.push(newSpot);
-      };
-    });
+    $scope.spotSwiped = function(index) {
+      var newSpot = // new spot data
+      $scope.spot.push(newSpot);
+    };
+
+  });
+
+
+  app.controller('FavoritesCtrl', function($scope, User) {
+    // get the list of our favorites from the user service
+    $scope.favorites = User.favorites;
+
+    $scope.removeSpot = function(spot, index) {
+      User.removeSpotFromFavorites(spot, index);
+    }
+  });
+  
 
   // Configurations for tab and view navigation of app
   app.config(function($stateProvider, $urlRouterProvider) {
@@ -138,6 +160,10 @@
 
     $urlRouterProvider.otherwise('/discover');
 
+  })
+
+  .constant('SERVER', {
+    url: 'http://ds.urandom.info'
   });
 
   app.run(function($ionicPlatform) {
@@ -154,3 +180,15 @@
   });
 
 }());
+
+
+
+
+
+
+
+
+
+
+
+
