@@ -2,133 +2,111 @@
   
   var app = angular.module('datespot', ['ionic']);
 
-  // var app = angular.module('datespot.userservices', [])
-  // // User factory within the module
-  // .factory('User', function() {
-    
-  //   console.log('Loaded the User Factory');
+  // Controller to manage scrolling menu for occasions
+  app.controller('ScrollCtrl', ['$scope', function($scope) {
+    $scope.data = {
+      isLoading: false
+    };
+  }]);
 
-  //   var o = {
-  //     favorites: [],
-  //     newFavorites: 0
+  // Controller to manage functionality for the Filter
+  // app.controller('FilterCtrl', function($scope, User) {
+  //   $scope.runFilter = function (bool) {  
+  //     // To be expanded and perform the jSON query when
+  //     // the user has changed the search parameters
+  //     console.log('Runfilter clicked!'); 
   //   }
+  // };  
+  
 
-  //   o.addSpotToFavorites = function(spot) {
-  //     // make sure there's a date spot to add
-  //     if (!spot) return false;
+  // Controller to manage the datespot shortlist
+  app.controller('ListCtrl', function($scope) {
+    $scope.spots = [
+      {
+        name: "Sexy Venue",
+        description: "this is a sweet venue"
+      },
 
-  //     // add to favorites array
-  //     o.favorites.unshift(spot);
-  //     o.newFavorites++;
-  //   }
+      {
+        name: "Seductive Spot",
+        description: "ideal to impress"
+      }
+    ];
+  });
 
-  //   o.removeSpotFromFavorites = function(spot, index) {
-  //     // make sure there's a date spot to add
-  //     if (!spot) return false;
+  // Controller to manage detail page (details for each venue)
+  app.controller('DetailCtrl', function($scope) {
+    $scope.spots
+  });
 
-  //     // add to favorites array
-  //     o.favorites.splice(index, 1);
-  //   }
-
-  //   o.favoriteCount = function() {
-  //     return o.newFavorites;
-  //   }
-  //   return o;
+  // Controller to manage discovery and swipe functionality
+  app.controller('DiscoverCtrl', function($scope, $timeout, User, Recommendations) {
     
-  // }) // notice the termination here, as we're terminating the factory ONLY
+    FactoryFuck.Scrot();
 
-  // // Recommendations Factory
-  // .factory('FactoryFuck', function() {
-    
-  //     console.log('Loaded the FactoryFuck Factory');  
-    
-  //   return {
-  //     Scrot: function(){
+    $scope.spots = [
+      {
+        name: "Sexy Venue",
+        description: "this is a sweet venue",
+        address: "33 Sexy Street"
+      },
+
+      {
+        name: "Seductive Spot",
+        description: "ideal to impress",
+        address: "22 Seduction Street"
+      }
+    ];
+
+      // Get our recommended datespots
+      Recommendations.getVenues()
+      .then(function(){
         
-  //         console.log('So we managed to load some fucking factory. It worked?');
-  //     }
-  //   }
-      
-  // }); 
-
-
-  // // notice the termination here, as we're terminating the factory AND the module! Extra ';'
-
-
-  // var app = angular.module('datespot.jsonservices', [])
-  //   .factory('Recommendations', function($http, SERVER) {
-      
-  //     console.log('Loaded the Recommendations Factory');  
-  //     console.log('The Server Address is at: ' + SERVER.url);
-      
-  //     // We need to insure we are always returing a value from a factory definition
-  //     var o = {
-  //       queue: [],
-  //       newFavorites: 0
-  //     }
-
-  //     // Function: Get Venues 
-  //     o.getVenues = function() {
+        $scope.currentSpot = Recommendations.queue[0];
         
-  //     var url = SERVER.url + '/client.php?a=all';
-  //     console.log('Getting venues from ' + url);
-      
-  //       return $http({
-  //         method: 'GET',
-  //         url: url
-  //       }).success(function(data)
-  //     {
-  //         // merge data into the queue
-  //       o.queue = o.queue.concat(data.points); // get the array of 'points'
+        console.log($scope.currentSpot);
+      });
 
-  //       // OK so we've apparently received something here, we need to loop through the results
-  //       console.log('Looping through results...');
-  //       for(i in data.points) 
-  //       { 
-  //         console.log(data.points[i]);
-  //       }
-        
-  //      // console.log(data.points); 
-  //       });
-      
-  //     } // end getVenues
+    // Fired when we favorite or skip a datespot
+    $scope.sendFeedback = function (bool) {
+      // first, add to favorites if they favorited
+      if (bool) User.addSpotToFavorites($scope.currentSpot);
+      $scope.currentSpot.rated = bool;
+      $scope.currentSpot.hide = true;
 
-      
-  //     // Function: Next Venue 
-  //     o.nextVenue = function() {
-  //       // pop the index 0 off
-  //       o.queue.shift();
+    // Drop the current venue from the results list and load the next one.
+    Recommendations.nextVenue();
 
-  //       // low on the queue? lets fill it up
-  //       if (o.queue.length <= 3) {
-  //        // o.getVenues(); // we don't do this as our JSON provides all venues currently
-  //       }
-  //     }
+      $timeout(function() {
+        // $timeout to allow animation to complete
+        $scope.currentSpot = Recommendations.queue[0];
       
-  //     // Return the function definitions
-  //     return o;
+        console.log('Loading Venue: ');
+        console.log( $scope.currentSpot );
       
-  // });
+      }, 250);
+    }
 
-  // /* Some basic ionic utilities to be used for local storage of variable */
-  // var app = angular.module('ionic.utils', [])
-  // .factory('$localstorage', ['$window', function($window) {
-  //   return {
-  //     set: function(key, value) {
-  //       $window.localStorage[key] = value;
-  //     },
-  //     get: function(key, defaultValue) {
-  //       return $window.localStorage[key] || defaultValue;
-  //     },
-  //     setObject: function(key, value) {
-  //       $window.localStorage[key] = JSON.stringify(value);
-  //     },
-  //     getObject: function(key) {
-  //       return JSON.parse($window.localStorage[key] || '{}');
-  //     }
-  //   }
-  // }]);
+    $scope.spotDestroyed = function(index) {
+      $scope.spots.splice(index, 1);
+    };
 
+    $scope.spotSwiped = function(index) {
+      var newSpot = // new spot data
+      $scope.spot.push(newSpot);
+    };
+
+  });
+
+
+  app.controller('FavoritesCtrl', function($scope, User) {
+    // get the list of our favorites from the user service
+    $scope.favorites = User.favorites;
+
+    $scope.removeSpot = function(spot, index) {
+      User.removeSpotFromFavorites(spot, index);
+    }
+  });
   
 
   // Configurations for tab and view navigation of app
@@ -202,3 +180,15 @@
   });
 
 }());
+
+
+
+
+
+
+
+
+
+
+
+
